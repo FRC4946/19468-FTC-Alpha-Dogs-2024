@@ -89,7 +89,7 @@ public class Constants {
         public static final Servo.Direction rightInvert = Servo.Direction.FORWARD;
 
         public static final double homeAngle = 200; //0
-        public static final double pickupAngle = 13.23; //0
+        public static final double pickupAngle = 5; //0
         public static final double scoreAngle = 125.83; //0
     }
 

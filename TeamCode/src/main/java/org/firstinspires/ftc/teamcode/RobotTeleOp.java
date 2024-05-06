@@ -15,13 +15,16 @@ import org.firstinspires.ftc.teamcode.subsystems.Wrist;
 public class RobotTeleOp extends LinearOpMode {
 
     Mecanum s_Drivetrain;
-    Arm s_Arm;
-    Climber s_Climber;
-    Wrist s_Wrist;
-    Claw s_Claw;
-    //Vision s_Vision;
+
+        Arm s_Arm;
+        Climber s_Climber;
+        Wrist s_Wrist;
+        Claw s_Claw;
+        //Vision s_Vision;
 
     private ElapsedTime runtime = new ElapsedTime();
+
+    boolean slomode = false;
 
     @Override
     public void runOpMode() {
@@ -29,29 +32,50 @@ public class RobotTeleOp extends LinearOpMode {
         telemetry.update();
 
         s_Drivetrain = new Mecanum(hardwareMap);
-        s_Arm = new Arm(hardwareMap);
-        s_Climber = new Climber(hardwareMap);
-        s_Claw = new Claw(hardwareMap);
-        s_Wrist = new Wrist(hardwareMap);
-        //s_Vision = new Vision(hardwareMap);
 
+        try {
+            s_Arm = new Arm(hardwareMap);
+            s_Climber = new Climber(hardwareMap);
+            s_Claw = new Claw(hardwareMap);
+            s_Wrist = new Wrist(hardwareMap);
+            //s_Vision = new Vision(hardwareMap);
+        } catch (Exception e) {
+
+        }
         waitForStart();
         runtime.reset();
 
         while (opModeIsActive()) {
-            s_Drivetrain.teleop(gamepad1);
-            s_Arm.teleop(gamepad1);
-            s_Claw.teleop(gamepad1, gamepad2);
-            s_Wrist.teleop(gamepad1, gamepad2, s_Arm.atWSetpoint());
-            s_Climber.teleop(gamepad1);
+
+            if (gamepad2.left_bumper) {
+                slomode = true;
+            } else if (gamepad2.right_bumper) {
+                slomode = false;
+            }
+
+
+            s_Drivetrain.teleop(gamepad1, slomode);
+            try {
+                s_Arm.teleop(gamepad1);
+                s_Claw.teleop(gamepad1, gamepad2);
+                s_Wrist.teleop(gamepad1, gamepad2, s_Arm.atWSetpoint());
+                s_Climber.teleop(gamepad1);
+            } catch (Exception e) {
+
+            }
+
 
             s_Drivetrain.periodic(telemetry);
-            s_Arm.periodic(telemetry);
-            s_Climber.periodic(telemetry);
-            s_Wrist.periodic(telemetry);
-            s_Claw.periodic(telemetry);
-            //s_Vision.periodic(telemetry);
+            try {
+                s_Arm.periodic(telemetry);
+                s_Climber.periodic(telemetry);
+                s_Wrist.periodic(telemetry);
+                s_Claw.periodic(telemetry);
+                //s_Vision.periodic(telemetry);
+                telemetry.addData("Slo mode", slomode);
+            } catch (Exception e) {
 
+            }
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
         }

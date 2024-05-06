@@ -57,27 +57,27 @@ public class Claw {
     public void teleop(Gamepad gamepad1, Gamepad gamepad2) {
 
         if (leftC == 0) {
-            if (gamepad1.dpad_left && Utilities.withinBounds(getLeftAngle(), Constants.ClawConstants.openAngle, 1)) {
+            if (gamepad2.dpad_left && Utilities.withinBounds(getLeftAngle(), Constants.ClawConstants.openAngle, 1)) {
                 closeLClaw();
                 leftC++;
-            } else if (gamepad1.dpad_left) {
+            } else if (gamepad2.dpad_left) {
                 openLClaw();
                 leftC++;
             }
-        } else if (!gamepad1.dpad_left) {
+        } else if (!gamepad2.dpad_left) {
             leftC = 0;
         }
 
         if (rightC == 0) {
-            if (gamepad1.dpad_right && Utilities.withinBounds(getRightAngle(), Constants.ClawConstants.openAngle, 1)) {
+            if (gamepad2.dpad_right && Utilities.withinBounds(getRightAngle(), Constants.ClawConstants.openAngle, 1)) {
                 closeRClaw();
                 rightC++;
-            } else if (gamepad1.dpad_right) {
+            } else if (gamepad2.dpad_right) {
                 openRClaw();
                 rightC++;
             }
 
-        } else if (!gamepad1.dpad_right) {
+        } else if (!gamepad2.dpad_right) {
             rightC = 0;
         }
 

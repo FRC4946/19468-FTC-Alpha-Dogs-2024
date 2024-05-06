@@ -17,6 +17,9 @@ public class Mecanum {
     private DcMotor frontLeft0, frontRight1, backLeft2, backRight3;
     private IMU imu;
 
+
+    double deadband = 0.3;
+    double deadbandSpeed = 0.05;
     public Mecanum(HardwareMap hardwareMap) {
 
         frontLeft0 = hardwareMap.get(DcMotor.class, MecanumConstants.frontLeftMotor);
@@ -44,13 +47,19 @@ public class Mecanum {
 
     }
 
-    public void teleop(Gamepad gamepad1) {
+    public void teleop(Gamepad gamepad1, boolean mode) {
         double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
         double x = gamepad1.left_stick_x;
         double rx = gamepad1.right_stick_x / 2;
 
         if (gamepad1.options) {
             imu.resetYaw();
+        }
+
+        if (mode) {
+            x /= 10;
+            y /= 10;
+            rx /= 10;
         }
 
         drive(y, x * 1.1, rx, true);
